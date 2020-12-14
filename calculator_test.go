@@ -51,3 +51,26 @@ func TestMultiply(t *testing.T) {
 		t.Errorf("want %f, got %f", want, got)
 	}
 }
+
+func TestDivide(t *testing.T) {
+	t.Parallel()
+	testCases := []*errorTestCase{
+		{a: 4, b: 2, want: 2, errExpected: false},
+	}
+
+	for _, tc := range testCases {
+		got, err := calculator.Divide(tc.a, tc.b)
+
+		if tc.errExpected && err == nil {
+			t.Fatalf("%s: Divide(%f, %f) expected an error to be returned but got nil", tc.name, tc.a, tc.b)
+		}
+
+		if !tc.errExpected && err != nil {
+			t.Fatalf("%s: Divide(%f, %f) returned an unexpected error: %v", tc.name, tc.a, tc.b, err)
+		}
+
+		if !tc.errExpected && tc.want != got {
+			t.Fatalf("%s: Divide(%f, %f) want %f, got %f", tc.name, tc.a, tc.b, tc.want, got)
+		}
+	}
+}
