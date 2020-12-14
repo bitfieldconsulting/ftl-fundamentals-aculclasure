@@ -2,7 +2,9 @@ package calculator_test
 
 import (
 	"calculator"
+	"math/rand"
 	"testing"
+	"time"
 )
 
 // testCase represents a case for testing non-error producing Calculator functions.
@@ -45,10 +47,14 @@ func TestSubtract(t *testing.T) {
 
 func TestMultiply(t *testing.T) {
 	t.Parallel()
-	var want float64 = 6
-	got := calculator.Multiply(3, 2)
-	if want != got {
-		t.Errorf("want %f, got %f", want, got)
+	rand.Seed(time.Now().UnixNano())
+	for i := 0; i < 100; i++ {
+		a, b := rand.Float64(), rand.Float64()
+		want := a * b
+		got := calculator.Multiply(a, b)
+		if want != got {
+			t.Errorf("Multiply(%f, %f) want %f, got %f", a, b, want, got)
+		}
 	}
 }
 
