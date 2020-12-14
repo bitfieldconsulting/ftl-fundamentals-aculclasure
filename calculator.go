@@ -1,6 +1,8 @@
 // Package calculator provides a library for simple calculations in Go.
 package calculator
 
+import "fmt"
+
 // Add takes two numbers and returns the result of adding them together.
 func Add(a, b float64) float64 {
 	return a + b
@@ -22,5 +24,9 @@ func Multiply(a, b float64) float64 {
 // first number by the second number. If the second number is 0,
 // then an error is returned.
 func Divide(a, b float64) (float64, error) {
-	return 0, nil
+	if b == 0 {
+		return 0, fmt.Errorf("got invalid value for b (%f), want any number other than 0", b)
+	}
+
+	return (a / b), nil
 }
