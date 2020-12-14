@@ -55,7 +55,10 @@ func TestMultiply(t *testing.T) {
 func TestDivide(t *testing.T) {
 	t.Parallel()
 	testCases := []*errorTestCase{
-		{a: 4, b: 2, want: 2, errExpected: false},
+		{a: 4, b: 2, want: 2, errExpected: false, name: "Division of evenly divisible positive number to give a positive quotient"},
+		{a: -4, b: -2, want: 2, errExpected: false, name: "Division of 2 negative numbers (evenly divisible) to give a positive quotient"},
+		{a: -4, b: 2, want: -2, errExpected: false, name: "Division of negative number by even number to give negative quotient"},
+		{a: 4, b: 0, want: 0, errExpected: true, name: "Division by zero to return an error"},
 	}
 
 	for _, tc := range testCases {
