@@ -55,7 +55,7 @@ func TestMultiply(t *testing.T) {
 func TestDivide(t *testing.T) {
 	t.Parallel()
 	testCases := []*errorTestCase{
-		{a: 4, b: 2, want: 2, errExpected: false},
+		{a: 4, b: 2, want: 3, errExpected: false},
 	}
 
 	for _, tc := range testCases {
