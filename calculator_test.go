@@ -5,6 +5,11 @@ import (
 	"testing"
 )
 
+// testCase represents a case that can be tested in the various Test functions.
+type testCase struct {
+	a, b, want float64
+}
+
 func TestAdd(t *testing.T) {
 	t.Parallel()
 	var want float64 = 4
