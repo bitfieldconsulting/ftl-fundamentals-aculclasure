@@ -5,10 +5,17 @@ import (
 	"testing"
 )
 
-// testCase represents a case that can be tested in the various Test functions.
+// testCase represents a case for testing non-error producing Calculator functions.
 type testCase struct {
 	a, b, want float64
 	name       string
+}
+
+// errorTestCase represents a case for testing Calculator functions that return errors.
+type errorTestCase struct {
+	a, b, want  float64
+	name        string
+	errExpected bool
 }
 
 func TestAdd(t *testing.T) {
