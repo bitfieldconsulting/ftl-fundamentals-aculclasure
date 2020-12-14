@@ -8,20 +8,21 @@ import (
 // testCase represents a case that can be tested in the various Test functions.
 type testCase struct {
 	a, b, want float64
+	name       string
 }
 
 func TestAdd(t *testing.T) {
 	t.Parallel()
 	testCases := []*testCase{
-		{a: 1, b: 1, want: 2},
-		{a: -1, b: -1, want: -2},
-		{a: -1, b: 1, want: 0},
+		{a: 1, b: 1, want: 2, name: "Two positive numbers which sum to a positive number"},
+		{a: -1, b: -1, want: -2, name: "Two negative numbers which sum to a negative number"},
+		{a: -1, b: 1, want: 0, name: "Positive and negative number which sum to 0"},
 	}
 
 	for _, tc := range testCases {
 		got := calculator.Add(tc.a, tc.b)
 		if tc.want != got {
-			t.Errorf("want %f, got %f", tc.want, got)
+			t.Errorf("%s: want %f, got %f", tc.name, tc.want, got)
 		}
 	}
 }
