@@ -20,6 +20,14 @@ type errorTestCase struct {
 	errExpected bool
 }
 
+// variadicTestCase represents a test case for a Calculator function that
+// accepts a variable number of inputs.
+type variadicTestCase struct {
+	inputs []float64
+	want   float64
+	name   string
+}
+
 func TestAdd(t *testing.T) {
 	t.Parallel()
 	testCases := []*testCase{
