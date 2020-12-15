@@ -83,3 +83,26 @@ func TestDivide(t *testing.T) {
 		}
 	}
 }
+
+func TestSqrt(t *testing.T) {
+	t.Parallel()
+	testCases := []*errorTestCase{
+		{a: 4, want: 2, errExpected: false, name: "Square root of evenly squarable positive number"},
+	}
+
+	for _, tc := range testCases {
+		got, err := calculator.Sqrt(tc.a)
+
+		if tc.errExpected && err == nil {
+			t.Fatalf("%s: Sqrt(%f) expected an error to be returned but got nil", tc.name, tc.a)
+		}
+
+		if !tc.errExpected && err != nil {
+			t.Fatalf("%s: Sqrt(%f) returned an unexpected error: %v", tc.name, tc.a, err)
+		}
+
+		if !tc.errExpected && tc.want != got {
+			t.Fatalf("%s: Sqrt(%f) want %f, got %f", tc.name, tc.a, tc.want, got)
+		}
+	}
+}
