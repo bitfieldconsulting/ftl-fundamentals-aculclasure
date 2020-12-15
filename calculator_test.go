@@ -87,7 +87,7 @@ func TestDivide(t *testing.T) {
 func TestSqrt(t *testing.T) {
 	t.Parallel()
 	testCases := []*errorTestCase{
-		{a: 4, want: 1.5, errExpected: false, name: "Square root of evenly squarable positive number"},
+		{a: 4, want: 2, errExpected: false, name: "Square root of evenly squarable positive number"},
 	}
 
 	for _, tc := range testCases {
