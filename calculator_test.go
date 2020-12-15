@@ -88,6 +88,8 @@ func TestSqrt(t *testing.T) {
 	t.Parallel()
 	testCases := []*errorTestCase{
 		{a: 4, want: 2, errExpected: false, name: "Square root of evenly squarable positive number"},
+		{a: 0.25, want: 0.5, errExpected: false, name: "Square root of positive decimal number"},
+		{a: -4, want: 0, errExpected: true, name: "Square root of negative number to produce an error"},
 	}
 
 	for _, tc := range testCases {
