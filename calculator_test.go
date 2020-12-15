@@ -28,6 +28,15 @@ type variadicTestCase struct {
 	name   string
 }
 
+// variadicErrorTestCase represents a test case for a Calculator function
+// that can accept a variable number of inputs and can return errors.
+type variadicErrorTestCase struct {
+	inputs      []float64
+	want        float64
+	name        string
+	errExpected bool
+}
+
 func TestAdd(t *testing.T) {
 	t.Parallel()
 	testCases := []*variadicTestCase{
