@@ -46,10 +46,19 @@ func TestAdd(t *testing.T) {
 
 func TestSubtract(t *testing.T) {
 	t.Parallel()
-	var want float64 = 2
-	got := calculator.Subtract(4, 2)
-	if want != got {
-		t.Errorf("want %f, got %f", want, got)
+	testCases := []*variadicTestCase{
+		{inputs: []float64{}, want: 0, name: "Difference of empty slice of arguments"},
+		{inputs: []float64{100}, want: 100, name: "Difference of single argument"},
+		{inputs: []float64{1, 1, 1}, want: -1, name: "Difference of 3 positive numbers to give a negative number"},
+		{inputs: []float64{5, 1, 1}, want: 3, name: "Difference of 3 positive numbers to give a positive number"},
+		{inputs: []float64{-1, -1, -1, -1}, want: 2, name: "Difference of 4 negative numbers to give a positive number"},
+	}
+
+	for _, tc := range testCases {
+		got := calculator.Subtract(tc.inputs...)
+		if tc.want != got {
+			t.Errorf("%s: Subtract(%v) want %f, got %f", tc.name, tc.inputs, tc.want, got)
+		}
 	}
 }
 

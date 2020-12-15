@@ -17,10 +17,22 @@ func Add(inputs ...float64) float64 {
 	return sum
 }
 
-// Subtract takes two numbers and returns the result of subtracting the second
-// from the first.
-func Subtract(a, b float64) float64 {
-	return a - b
+// Subtract takes a variable number of arguments and returns the
+// result of subtracting them in the order they are given.
+func Subtract(inputs ...float64) float64 {
+	if len(inputs) == 0 {
+		return 0
+	}
+
+	if len(inputs) == 1 {
+		return inputs[0]
+	}
+
+	difference := inputs[0]
+	for _, v := range inputs[1:] {
+		difference -= v
+	}
+	return difference
 }
 
 // Multiply takes two numbers and returns the result of multiplying
