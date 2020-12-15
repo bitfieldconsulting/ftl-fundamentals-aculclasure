@@ -30,16 +30,16 @@ type variadicTestCase struct {
 
 func TestAdd(t *testing.T) {
 	t.Parallel()
-	testCases := []*testCase{
-		{a: 1, b: 1, want: 2, name: "Two positive numbers which sum to a positive number"},
-		{a: -1, b: -1, want: -2, name: "Two negative numbers which sum to a negative number"},
-		{a: -1, b: 1, want: 0, name: "Positive and negative number which sum to 0"},
+	testCases := []*variadicTestCase{
+		{inputs: []float64{1, 1, 1}, want: 3, name: "Sum of 3 positive numbers to give a positive number"},
+		{inputs: []float64{-1, -1, -1}, want: -3, name: "Sum of 3 negative numbers to give a negative number"},
+		{inputs: []float64{-1, 1, 0}, want: 0, name: "Sum of negative number and positive number"},
 	}
 
 	for _, tc := range testCases {
-		got := calculator.Add(tc.a, tc.b)
+		got := calculator.Add(tc.inputs...)
 		if tc.want != got {
-			t.Errorf("%s: Add(%f, %f) want %f, got %f", tc.name, tc.a, tc.b, tc.want, got)
+			t.Errorf("%s: Add(%v) want %f, got %f", tc.name, tc.inputs, tc.want, got)
 		}
 	}
 }
