@@ -30,3 +30,9 @@ func Divide(a, b float64) (float64, error) {
 
 	return (a / b), nil
 }
+
+// Sqrt takes a positive number and returns its square root. If a
+// negative number is given, then an error is returned.
+func Sqrt(a float64) (float64, error) {
+	return 0, nil
+}
