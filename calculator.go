@@ -35,10 +35,18 @@ func Subtract(inputs ...float64) float64 {
 	return difference
 }
 
-// Multiply takes two numbers and returns the result of multiplying
-// them together.
-func Multiply(a, b float64) float64 {
-	return a * b
+// Multiply takes a variable number of arguments and returns
+// the result of multiplying them together.
+func Multiply(inputs ...float64) float64 {
+	if len(inputs) == 0 {
+		return 0
+	}
+
+	var product float64 = 1
+	for _, v := range inputs {
+		product *= v
+	}
+	return product
 }
 
 // Divide takes two numbers and returns the result of dividing the

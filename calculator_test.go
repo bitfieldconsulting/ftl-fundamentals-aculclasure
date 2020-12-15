@@ -65,12 +65,33 @@ func TestSubtract(t *testing.T) {
 func TestMultiply(t *testing.T) {
 	t.Parallel()
 	rand.Seed(time.Now().UnixNano())
-	for i := 0; i < 100; i++ {
-		a, b := rand.Float64(), rand.Float64()
-		want := a * b
-		got := calculator.Multiply(a, b)
-		if want != got {
-			t.Errorf("Multiply(%f, %f) want %f, got %f", a, b, want, got)
+	numTestCases := 100
+	maxInputValue := 10
+	maxNumInputsPerTestCase := 10
+	testCases := make(chan *variadicTestCase)
+
+	go func() {
+		for i := 0; i < numTestCases; i++ {
+			numInputs := rand.Intn(maxNumInputsPerTestCase)
+			inputs := []float64{}
+			var want float64 = 0
+			if numInputs > 0 {
+				want = 1
+			}
+			for j := 0; j < numInputs; j++ {
+				randomInput := float64(rand.Intn(maxInputValue) + 1)
+				want *= randomInput
+				inputs = append(inputs, randomInput)
+			}
+			testCases <- &variadicTestCase{inputs: inputs, want: want}
+		}
+		close(testCases)
+	}()
+
+	for tc := range testCases {
+		got := calculator.Multiply(tc.inputs...)
+		if tc.want != got {
+			t.Errorf("Multiply(%v) want %f, got %f", tc.inputs, tc.want, got)
 		}
 	}
 }
