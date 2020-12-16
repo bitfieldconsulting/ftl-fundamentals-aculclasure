@@ -92,10 +92,12 @@ func TestMultiply(t *testing.T) {
 		for i := 0; i < numTestCases; i++ {
 			numInputs := rand.Intn(maxNumInputsPerTestCase)
 			inputs := []float64{}
-			var want float64 = 0
+			var want float64
+
 			if numInputs > 0 {
 				want = 1
 			}
+
 			for j := 0; j < numInputs; j++ {
 				randomInput := float64(rand.Intn(maxInputValue) + 1)
 				want *= randomInput
