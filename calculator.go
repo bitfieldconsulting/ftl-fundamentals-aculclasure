@@ -4,6 +4,8 @@ package calculator
 import (
 	"fmt"
 	"math"
+	"strconv"
+	"strings"
 )
 
 // Add takes a variable number of arguments and returns the
@@ -79,4 +81,47 @@ func Sqrt(a float64) (float64, error) {
 	}
 
 	return math.Sqrt(a), nil
+}
+
+// Evaluate accepts a binary mathematical expression represented as a string
+// and returns the evaluated value of the expression. If the expression does
+// not contain a valid mathematical operator or represents an invalid operation
+// (like dividing by 0), then an error is returned.
+func Evaluate(expression string) (float64, error) {
+	operatorIndex := strings.IndexFunc(expression, isOperator)
+	if operatorIndex == -1 {
+		return 0, fmt.Errorf("want an expression containing an operator (+, -, *, /), got %s", expression)
+	}
+
+	operator := rune(expression[operatorIndex])
+	operands := strings.FieldsFunc(expression, func(r rune) bool { return r == operator })
+	if len(operands) != 2 {
+		return 0, fmt.Errorf("want 2 operands to work on (got %v)", operands)
+	}
+
+	operandValues := []float64{}
+	for _, v := range operands {
+		operand, err := strconv.ParseFloat(strings.TrimSpace(v), 64)
+		if err != nil {
+			return 0, err
+		}
+		operandValues = append(operandValues, operand)
+	}
+
+	switch operator {
+	case '+':
+		return Add(operandValues...), nil
+	case '-':
+		return Subtract(operandValues...), nil
+	case '*':
+		return Multiply(operandValues...), nil
+	default:
+		return Divide(operandValues...)
+	}
+}
+
+// isOperator accepts a rune r and returns true if r is a valid
+// binary mathematical operator and false otherwise.
+func isOperator(r rune) bool {
+	return r == '+' || r == '-' || r == '*' || r == '/'
 }

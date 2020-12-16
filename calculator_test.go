@@ -168,3 +168,34 @@ func TestSqrt(t *testing.T) {
 		}
 	}
 }
+
+func TestEvaluate(t *testing.T) {
+	t.Parallel()
+	testCases := []*evaluationTestCase{
+		{expression: "2 plus 2", want: 0, errExpected: true, name: "Expression with no operator to return an error"},
+		{expression: "2 +", want: 0, errExpected: true, name: "Expression with missing operand to return an error"},
+		{expression: "2 - not_a_number", want: 0, errExpected: true, name: "Expression with only 1 valid operand to return an error"},
+		{expression: "1 one wun + 1", want: 0, errExpected: true, name: "Expression with only 1 valid operand to return an error"},
+		{expression: "1 + 1", want: 2, errExpected: false, name: "Addition of 2 positive numbers to give a positive number"},
+		{expression: " 1 - 1 ", want: 0, errExpected: false, name: "Subtraction of 2 identical numbers to give 0"},
+		{expression: "  2  *  2  ", want: 4, errExpected: false, name: "Multiplication of 2 positive numbers to give a positive number"},
+		{expression: "10/2", want: 5, errExpected: false, name: "Division of evenly divisible positive number to give a positive number"},
+		{expression: "10      /0", want: 0, errExpected: true, name: "Division by 0 to return an error"},
+	}
+
+	for _, tc := range testCases {
+		got, err := calculator.Evaluate(tc.expression)
+
+		if tc.errExpected && err == nil {
+			t.Fatalf("%s: (%s), expected an error to be returned but got nil", tc.name, tc.expression)
+		}
+
+		if !tc.errExpected && err != nil {
+			t.Fatalf("%s: (%s) returned an unexpected error: %v", tc.name, tc.expression, err)
+		}
+
+		if !tc.errExpected && tc.want != got {
+			t.Fatalf("%s: (%s), want: %f, got %f", tc.name, tc.expression, tc.want, got)
+		}
+	}
+}
