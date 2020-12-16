@@ -49,15 +49,26 @@ func Multiply(inputs ...float64) float64 {
 	return product
 }
 
-// Divide takes two numbers and returns the result of dividing the
-// first number by the second number. If the second number is 0,
-// then an error is returned.
-func Divide(a, b float64) (float64, error) {
-	if b == 0 {
-		return 0, fmt.Errorf("got invalid value for b (%f), want any number other than 0", b)
+// Divide a variable number of arguments and returns the result of
+// dividing them by each other (starting from the first input). If
+// a divide-by-zero happens at any point, then an error is returned.
+func Divide(inputs ...float64) (float64, error) {
+	if len(inputs) == 0 {
+		return 0, nil
 	}
 
-	return (a / b), nil
+	if len(inputs) == 1 {
+		return inputs[0], nil
+	}
+
+	quotient := inputs[0]
+	for _, v := range inputs[1:] {
+		if v == 0 {
+			return 0, fmt.Errorf("got an invalid input value (%f), want any value other than 0", v)
+		}
+		quotient /= v
+	}
+	return quotient, nil
 }
 
 // Sqrt takes a positive number and returns its square root. If a
