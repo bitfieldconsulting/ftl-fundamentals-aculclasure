@@ -37,6 +37,15 @@ type variadicErrorTestCase struct {
 	errExpected bool
 }
 
+// evaluationTestCase represents a test case for any function which expects
+// a mathematical expression given as a string to be evaluated
+// and can return errors.
+type evaluationTestCase struct {
+	expression, name string
+	want             float64
+	errExpected      bool
+}
+
 func TestAdd(t *testing.T) {
 	t.Parallel()
 	testCases := []*variadicTestCase{
