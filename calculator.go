@@ -2,71 +2,58 @@
 package calculator
 
 import (
+	"errors"
 	"fmt"
 	"math"
 	"strconv"
 	"strings"
 )
 
-// Add takes a variable number of arguments and returns the
-// result of adding them together.
-func Add(inputs ...float64) float64 {
-	var sum float64
+var errDivideByZero = errors.New("cannot divide by 0")
 
-	for _, v := range inputs {
+// Add accepts at least 2 addends and a variable number of extra
+// addends and returns the result of adding them all together.
+func Add(a, b float64, extra ...float64) float64 {
+	sum := a + b
+	for _, v := range extra {
 		sum += v
 	}
 	return sum
 }
 
-// Subtract takes a variable number of arguments and returns the
-// result of subtracting them in the order they are given.
-func Subtract(inputs ...float64) float64 {
-	if len(inputs) == 0 {
-		return 0
+// Subtract accepts at least 2 arguments and a variable number of
+// extra arguments and returns the result of subtracting them in the
+// order they are given.
+func Subtract(a, b float64, extra ...float64) float64 {
+	diff := a - b
+	for _, v := range extra {
+		diff -= v
 	}
-
-	if len(inputs) == 1 {
-		return inputs[0]
-	}
-
-	difference := inputs[0]
-	for _, v := range inputs[1:] {
-		difference -= v
-	}
-	return difference
+	return diff
 }
 
-// Multiply takes a variable number of arguments and returns
-// the result of multiplying them together.
-func Multiply(inputs ...float64) float64 {
-	if len(inputs) == 0 {
-		return 0
-	}
-
-	var product float64 = 1
-	for _, v := range inputs {
+// Multiply accepts 2 numbers and a variable number of extra numbers
+// and returns their product.
+func Multiply(a, b float64, extra ...float64) float64 {
+	product := a * b
+	for _, v := range extra {
 		product *= v
 	}
 	return product
 }
 
-// Divide a variable number of arguments and returns the result of
-// dividing them by each other (starting from the first input). If
-// a divide-by-zero happens at any point, then an error is returned.
-func Divide(inputs ...float64) (float64, error) {
-	if len(inputs) == 0 {
-		return 0, nil
+// Divide accepts 2 numbers and a variable number of extra numbers
+// and returns the quotient of dividing them in the order they are
+// given. If a divide-by-zero condition is encountered, then an
+// error is returned.
+func Divide(a, b float64, extra ...float64) (float64, error) {
+	if b == 0 {
+		return 0, errDivideByZero
 	}
-
-	if len(inputs) == 1 {
-		return inputs[0], nil
-	}
-
-	quotient := inputs[0]
-	for _, v := range inputs[1:] {
+	quotient := a / b
+	for _, v := range extra {
 		if v == 0 {
-			return 0, fmt.Errorf("got an invalid input value (%f), want any value other than 0", v)
+			return 0, errDivideByZero
 		}
 		quotient /= v
 	}
@@ -77,9 +64,8 @@ func Divide(inputs ...float64) (float64, error) {
 // negative number is given, then an error is returned.
 func Sqrt(a float64) (float64, error) {
 	if a < 0 {
-		return 0, fmt.Errorf("got invalid value for a (%f), want any number other than 0", a)
+		return 0, errDivideByZero
 	}
-
 	return math.Sqrt(a), nil
 }
 
@@ -92,31 +78,28 @@ func Evaluate(expression string) (float64, error) {
 	if operatorIndex == -1 {
 		return 0, fmt.Errorf("want an expression containing an operator (+, -, *, /), got %s", expression)
 	}
-
 	operator := rune(expression[operatorIndex])
 	operands := strings.FieldsFunc(expression, func(r rune) bool { return r == operator })
 	if len(operands) != 2 {
 		return 0, fmt.Errorf("want 2 operands to work on (got %v)", operands)
 	}
-
-	operandValues := []float64{}
-	for _, v := range operands {
-		operand, err := strconv.ParseFloat(strings.TrimSpace(v), 64)
-		if err != nil {
-			return 0, err
-		}
-		operandValues = append(operandValues, operand)
+	a, err := strconv.ParseFloat(strings.TrimSpace(operands[0]), 64)
+	if err != nil {
+		return 0, err
 	}
-
+	b, err := strconv.ParseFloat(strings.TrimSpace(operands[1]), 64)
+	if err != nil {
+		return 0, err
+	}
 	switch operator {
 	case '+':
-		return Add(operandValues...), nil
+		return Add(a, b), nil
 	case '-':
-		return Subtract(operandValues...), nil
+		return Subtract(a, b), nil
 	case '*':
-		return Multiply(operandValues...), nil
+		return Multiply(a, b), nil
 	default:
-		return Divide(operandValues...)
+		return Divide(a, b)
 	}
 }
 
