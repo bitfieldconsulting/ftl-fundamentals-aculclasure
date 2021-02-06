@@ -196,7 +196,7 @@ func TestDivide(t *testing.T) {
 		errReceived := err != nil
 		if tc.errExpected != errReceived {
 			t.Fatalf("%s: Divide(%v, %v, %+v): unexpected error status: %v",
-				tc.name, tc.a, tc.b, tc.extra, errReceived)
+				tc.name, tc.a, tc.b, tc.extra, err)
 		}
 		if !tc.errExpected && tc.want != got {
 			t.Fatalf("%s: Divide(%v, %v, %+v) want %f, got %f",
@@ -220,7 +220,7 @@ func TestSqrt(t *testing.T) {
 		got, err := calculator.Sqrt(tc.a)
 		errReceived := err != nil
 		if tc.errExpected != errReceived {
-			t.Fatalf("%s: Sqrt(%f): unexpected error status: %v", tc.name, tc.a, errReceived)
+			t.Fatalf("%s: Sqrt(%f): unexpected error status: %v", tc.name, tc.a, err)
 		}
 		if !tc.errExpected && tc.want != got {
 			t.Fatalf("%s: Sqrt(%f) want %f, got %f", tc.name, tc.a, tc.want, got)
@@ -294,7 +294,7 @@ func TestEvaluate(t *testing.T) {
 		got, err := calculator.Evaluate(tc.expression)
 		errReceived := err != nil
 		if tc.errExpected != errReceived {
-			t.Fatalf("%s: (%s): unexpected error status: %v", tc.name, tc.expression, errReceived)
+			t.Fatalf("%s: (%s): unexpected error status: %v", tc.name, tc.expression, err)
 		}
 		if !tc.errExpected && tc.want != got {
 			t.Fatalf("%s: (%s), want: %f, got %f", tc.name, tc.expression, tc.want, got)
