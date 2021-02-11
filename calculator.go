@@ -5,8 +5,6 @@ import (
 	"errors"
 	"fmt"
 	"math"
-	"strconv"
-	"strings"
 )
 
 var errDivideByZero = errors.New("cannot divide by 0")
@@ -74,32 +72,25 @@ func Sqrt(a float64) (float64, error) {
 // not contain a valid mathematical operator or represents an invalid operation
 // (like dividing by 0), then an error is returned.
 func Evaluate(expression string) (float64, error) {
-	operatorIndex := strings.IndexFunc(expression, isOperator)
-	if operatorIndex == -1 {
-		return 0, fmt.Errorf("want an expression containing an operator (+, -, *, /), got %s", expression)
-	}
-	operator := rune(expression[operatorIndex])
-	operands := strings.FieldsFunc(expression, func(r rune) bool { return r == operator })
-	if len(operands) != 2 {
-		return 0, fmt.Errorf("want 2 operands to work on (got %v)", operands)
-	}
-	a, err := strconv.ParseFloat(strings.TrimSpace(operands[0]), 64)
-	if err != nil {
-		return 0, err
-	}
-	b, err := strconv.ParseFloat(strings.TrimSpace(operands[1]), 64)
+	var (
+		a, b     float64
+		operator string
+	)
+	_, err := fmt.Sscanf(expression, "%f%s%f", &a, &operator, &b)
 	if err != nil {
 		return 0, err
 	}
 	switch operator {
-	case '+':
+	case "+":
 		return Add(a, b), nil
-	case '-':
+	case "-":
 		return Subtract(a, b), nil
-	case '*':
+	case "*":
 		return Multiply(a, b), nil
-	default:
+	case "/":
 		return Divide(a, b)
+	default:
+		return 0, fmt.Errorf("want a valid operator (+, -, *, /), got %s", operator)
 	}
 }
 

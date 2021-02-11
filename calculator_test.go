@@ -260,6 +260,12 @@ func TestEvaluate(t *testing.T) {
 			errExpected: true,
 		},
 		{
+			name:        "Expression with no spacing between operands and operator",
+			expression:  "10/2",
+			want:        0,
+			errExpected: true,
+		},
+		{
 			name:        "Addition of 2 positive numbers to give positive number",
 			expression:  "1 + 1",
 			want:        2,
@@ -279,13 +285,13 @@ func TestEvaluate(t *testing.T) {
 		},
 		{
 			name:        "Division of evenly divisible positive numbers to give a positive number",
-			expression:  "10/2",
+			expression:  "10 / 2",
 			want:        5,
 			errExpected: false,
 		},
 		{
 			name:        "Division by 0 to give an error",
-			expression:  "10          /0",
+			expression:  "10          / 0",
 			want:        0,
 			errExpected: true,
 		},
