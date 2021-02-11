@@ -7,87 +7,96 @@ import (
 	"time"
 )
 
-func TestAdd(t *testing.T) {
-	t.Parallel()
+func TestAddSubtractMultiply(t *testing.T) {
 	testCases := []struct {
-		name  string
-		a, b  float64
-		extra []float64
-		want  float64
+		name                       string
+		a, b                       float64
+		extra                      []float64
+		wantSum, wantDiff, wantPrd float64
 	}{
 		{
-			name:  "Sum of 2 operands to give a positive number",
-			a:     1,
-			b:     1,
-			extra: nil,
-			want:  2,
+			name:     "Positive operands",
+			a:        3,
+			b:        2,
+			wantSum:  5,
+			wantDiff: 1,
+			wantPrd:  6,
 		},
 		{
-			name:  "Sum of 3 positive numbers to give a positive number",
-			a:     1,
-			b:     1,
-			extra: []float64{1},
-			want:  3,
+			name:     "Negative operands",
+			a:        -2,
+			b:        -2,
+			wantSum:  -4,
+			wantDiff: 0,
+			wantPrd:  4,
 		},
 		{
-			name:  "Sum of 5 negative numbers to give a negative number",
-			a:     -2,
-			b:     -2,
-			extra: []float64{-2, -2, -2},
-			want:  -10,
+			name:     "Mix of positive and negative operands",
+			a:        -5,
+			b:        5,
+			wantSum:  0,
+			wantDiff: -10,
+			wantPrd:  -25,
 		},
 		{
-			name:  "Sum of 4 numbers to give 0 sum",
-			a:     -1,
-			b:     -1,
-			extra: []float64{1, 1},
-			want:  0,
+			name:     "Mix of positive and negative operands",
+			a:        5,
+			b:        -5,
+			wantSum:  0,
+			wantDiff: 10,
+			wantPrd:  -25,
+		},
+		{
+			name:     "Zero for both operands",
+			a:        0,
+			b:        0,
+			wantSum:  0,
+			wantDiff: 0,
+			wantPrd:  0,
+		},
+		{
+			name:     "More than 2 operands (all positive)",
+			a:        8,
+			b:        1,
+			extra:    []float64{3, 2},
+			wantSum:  14,
+			wantDiff: 2,
+			wantPrd:  48,
+		},
+		{
+			name:     "More than 2 operands (all negative)",
+			a:        -6,
+			b:        -3,
+			extra:    []float64{-2, -1},
+			wantSum:  -12,
+			wantDiff: 0,
+			wantPrd:  36,
+		},
+		{
+			name:     "More than 2 operands (mixed negative and positive)",
+			a:        4,
+			b:        -3,
+			extra:    []float64{2},
+			wantSum:  3,
+			wantDiff: 5,
+			wantPrd:  -24,
 		},
 	}
 	for _, tc := range testCases {
 		got := calculator.Add(tc.a, tc.b, tc.extra...)
-		if tc.want != got {
-			t.Errorf("%s: Add(%v, %v, %+v) want %f, got %f",
-				tc.name, tc.a, tc.b, tc.extra, tc.want, got)
+		if tc.wantSum != got {
+			t.Errorf("%s: Add(%f, %f, %+v): want %f, got %f",
+				tc.name, tc.a, tc.b, tc.extra, tc.wantSum, got)
 		}
-	}
-}
-
-func TestSubtract(t *testing.T) {
-	t.Parallel()
-	testCases := []struct {
-		name  string
-		a, b  float64
-		extra []float64
-		want  float64
-	}{
-		{
-			name:  "Difference of 2 equal positive numbers to give 0",
-			a:     1,
-			b:     1,
-			extra: nil,
-			want:  0,
-		},
-		{
-			name:  "Difference of 2 equal negative numbers to give 0",
-			a:     -1,
-			b:     -1,
-			extra: nil,
-			want:  0,
-		},
-		{
-			name:  "Difference of more than 2 arguments",
-			a:     10,
-			b:     1,
-			extra: []float64{1, 1, 1, 1, 1, 1, 1, 1, 1},
-			want:  0,
-		},
-	}
-	for _, tc := range testCases {
-		got := calculator.Subtract(tc.a, tc.b, tc.extra...)
-		if tc.want != got {
-			t.Errorf("%s: Subtract(%v, %v, %+v)) want %f, got %f",
-				tc.name, tc.a, tc.b, tc.extra, tc.want, got)
+		got = calculator.Subtract(tc.a, tc.b, tc.extra...)
+		if tc.wantDiff != got {
+			t.Errorf("%s: Subtract(%f, %f, %+v): want %f, got %f",
+				tc.name, tc.a, tc.b, tc.extra, tc.wantDiff, got)
+		}
+		got = calculator.Multiply(tc.a, tc.b, tc.extra...)
+		if tc.wantPrd != got {
+			t.Errorf("%s: Multiply(%f, %f, %+v): want %f, got %f",
+				tc.name, tc.a, tc.b, tc.extra, tc.wantPrd, got)
 		}
 	}
 }

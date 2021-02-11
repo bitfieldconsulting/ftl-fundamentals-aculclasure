@@ -93,9 +93,3 @@ func Evaluate(expression string) (float64, error) {
 		return 0, fmt.Errorf("want a valid operator (+, -, *, /), got %s", operator)
 	}
 }
-
-// isOperator accepts a rune r and returns true if r is a valid
-// binary mathematical operator and false otherwise.
-func isOperator(r rune) bool {
-	return r == '+' || r == '-' || r == '*' || r == '/'
-}
