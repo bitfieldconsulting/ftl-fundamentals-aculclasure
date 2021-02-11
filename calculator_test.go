@@ -101,43 +101,23 @@ func TestAddSubtractMultiply(t *testing.T) {
 	}
 }
 
-func TestMultiply(t *testing.T) {
+func TestMultiplyWithRandom(t *testing.T) {
 	t.Parallel()
 	rand.Seed(time.Now().UnixNano())
-	numTestCases := 100
-	maxInputValue := 10
-	maxNumExtraInputsPerTestCase := 10
-	type testCase struct {
-		a, b  float64
-		extra []float64
-		want  float64
-	}
-	randomTestCases := make(chan testCase)
-	go func() {
-		for i := 0; i < numTestCases; i++ {
-			a, b := float64(rand.Intn(maxInputValue)), float64(rand.Intn(maxInputValue))
-			want := a * b
-			numInputs := rand.Intn(maxNumExtraInputsPerTestCase)
-			extra := []float64{}
-			for j := 0; j < numInputs; j++ {
-				randomInput := float64(rand.Intn(maxInputValue) + 1)
-				want *= randomInput
-				extra = append(extra, randomInput)
-			}
-			randomTestCases <- testCase{
-				a:     a,
-				b:     b,
-				extra: extra,
-				want:  want,
-			}
+	for i := 0; i < 100; i++ {
+		a, b := float64(rand.Intn(10)), float64(rand.Intn(10))
+		want := a * b
+		numInputs := rand.Intn(100)
+		extra := []float64{}
+		for j := 0; j < numInputs; j++ {
+			randomInput := float64(rand.Intn(10) + 1)
+			want *= randomInput
+			extra = append(extra, randomInput)
 		}
-		close(randomTestCases)
-	}()
-	for tc := range randomTestCases {
-		got := calculator.Multiply(tc.a, tc.b, tc.extra...)
-		if tc.want != got {
-			t.Errorf("Multiply(%v, %v, %+v) want %f, got %f",
-				tc.a, tc.a, tc.extra, tc.want, got)
+		got := calculator.Multiply(a, b, extra...)
+		if want != got {
+			t.Errorf("Multiply(%f, %f, %+v): want: %f, got %f",
+				a, b, extra, want, got)
 		}
 	}
 }
